@@ -5,3 +5,5 @@
 
 ### Technologies
 **name** - description
+
+### How to run this app?

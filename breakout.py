@@ -1,200 +1,73 @@
-import sys
 import pygame
-import random
+import sys
+from sett import Constant
+from paddle import Paddle
+from ball import Ball
 from wall import Wall
+#it will go to the breakout.py 
 
-class Breakout():
-    def main(self):
-        self.xspeed0 = 6
-        self.yspeed0 = 6
-        self.full_lives = 5
-        self.paddle_speed = 30
-        self.score = 0 
-        bgcolor = 0x08, 0x00, 0x1E  #ciemnygranat
-        size = self.width, self.height = 640, 480
-        #BLACK= (0,0,0)
-
+class Breakout:
+    def __init__(self):
         pygame.init()
-        pygame.display.set_caption("Breakout!!")
-        screen = pygame.display.set_mode(size)
-        #clock = pygame.time.Clock()
+        self.screen = pygame.display.set_mode((Constant.screen_width,Constant.screen_height))
+        self.clock = pygame.time.Clock()
 
-        paddle = pygame.image.load("images/glasspaddle.png").convert()
-        self.paddlerect = paddle.get_rect()  #tutaj tak samo jak w ball
+        self.bg_color = pygame.Color("black")
+        self.font = pygame.font.Font("kenney_future.ttf", 16)
+        self.game_over = False
 
-        ball = pygame.image.load("images/myball.png").convert()
-        ball.set_colorkey((255, 255, 255)) #zmienić, by nie było ramki dookoła
-        self.ballrect = ball.get_rect()
 
-        self.bounce = pygame.mixer.Sound('sound/bounce_sound.wav')
-        self.bounce.set_volume(10)
+        self.paddle = Paddle()
+        self.ball = Ball()
 
-        self.wall = Wall()
-        self.wall.build_wall(self.width)
+        self.all_sprites = pygame.sprite.Group()
+        self.all_sprites.add(self.paddle, self.ball)
 
-        #initialize for game loop
-        self.paddlerect = self.paddlerect.move((self.width/2) - (self.paddlerect.right/2), self.height-20)
-        self.ballrect = self.ballrect.move(self.width/2, self.height/2)
-        self.xspeed = self.xspeed0
-        self.yspeed = self.yspeed0
-        self.lives = self.full_lives
-        clock = pygame.time.Clock()
-        pygame.key.set_repeat(1,30)
-        pygame.mouse.set_visible(0)
+        self.wall = Wall(self.all_sprites)
 
-        while 1:
-            clock.tick(60)
-            self.key_press()
-            self.hit_ball()
-            self.move_ball()
-            self.lose_life(bgcolor, screen)
-            #make visible how many lives left
-            
-           # if self.xspeed < 0 and self.ballrect.left <0:
-            #    self.xspeed = - self.xspeed
-             #   self.bounce.play(0)
+    def reset(self):
+        self.game_over = False
+        self.paddle = Paddle()
+        self.ball = Ball()
 
-            #if self.xspeed > 0 and self.ballrect.right > self.width:
-             #   self.xspeed = - self.xspeed
-              #  self.bounce.play(0)
-            self.hit_wall()
-                     
-            screen.fill(bgcolor)
-            scoretext = pygame.font.Font(None, 40).render(str(self.score), True, (0,255,255),bgcolor)
-            scoretextrect = scoretext.get_rect()
-            scoretextrect = scoretextrect.move(self.width - scoretextrect.right, 0)
-            screen.blit(scoretext, scoretextrect)
+        self.all_sprites.empty()
+        self.all_sprites.add(self.paddle,self.ball)
+        self.wall = Wall(self.all_sprites)
 
-            self.rebuild_wall()
+    def handle_events(self):
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_LEFT]:
+            self.paddle.move_left()
+        if keys[pygame.K_RIGHT]:
+            self.paddle.move_right()
+        if self.game_over and keys[pygame.K_SPACE]:
+            self.reset()
 
-            for i in range(0,len(self.wall.brickrect)):
-                screen.blit(self.wall.brick, self.wall.brickrect[i])
-
-            screen.blit(ball,self.ballrect)
-            screen.blit(paddle,self.paddlerect)
-            pygame.display.flip()
-
-    #for paddle movement
-    def key_press(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                pygame.quit()
                 sys.exit()
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    sys.exit()
-                if event.key == pygame.K_LEFT:                        
-                    self.paddlerect = self.paddlerect.move(-self.paddle_speed, 0)     
-                    if (self.paddlerect.left < 0):                           
-                        self.paddlerect.left = 0      
-                if event.key == pygame.K_RIGHT:                    
-                    self.paddlerect = self.paddlerect.move(self.paddle_speed, 0)
-                    if (self.paddlerect.right > self.width):                            
-                        self.paddlerect.right = self.width
-    
-    #check if paddle has hit ball
-    def hit_ball(self):
-        if self.ballrect.bottom >= self.paddlerect.top and \
-            self.ballrect.bottom <= self.paddlerect.bottom and \
-            self.ballrect.right >= self.paddlerect.left and \
-            self.ballrect.left <= self.paddlerect.right:
-            
-            self.yspeed = -self.yspeed
-            self.bounce.play(0)
-            offset = self.ballrect.center[0] - self.paddlerect.center[0]
-            #changing angle of ball depending on the place where ball hits paddle
-            if offset > 0:
-                if offset >30:
-                    self.xspeed = 7
-                elif offset > 23:
-                    self.xspeed = 6
-                elif offset > 17:
-                    self.xspeed = 5
-            else:
-                if offset < -30:
-                    self.xspeed = -7
-                elif offset < -23:
-                    self.xspeed = -6
-                elif offset < -17:
-                    self.xspeed = -5
 
-    def move_ball(self):
-        self.ballrect = self.ballrect.move(self.xspeed, self.yspeed)
-        if self.ballrect.left < 0 or self.ballrect.right > self.width:
-            self.xspeed = - self.xspeed
-            self.bounce.play(0)
-        if self.ballrect.top < 0:
-            self.yspeed = - self.yspeed
-            self.bounce.play(0)
+    def update(self):
+        if self.ball.off_screen():
+            self.paddle.lose_life()
+            if self.paddle.lives <= 0:
+                self.game_over = True
+            self.ball.reset()
+        self.ball.collision_paddle(self.paddle)
+        self.wall.check_collison(self.ball)
+        self.all_sprites.update()
+        pygame.display.update()
+        self.clock.tick(120)
 
-    def lose_life(self, bgcolor, screen):
-        if self.ballrect.top > self.height:
-            self.lives -=1
-            self.xspeed = self.xspeed0 #starts new ball
-            if random.random() > 0.5:
-                self.xspeed = -self.xspeed
-            self.yspeed = self.yspeed0
-            self.ballrect.center = self.width * random.random(), self.height/3
+    def draw(self):
+        self.screen.fill(self.bg_color)
 
-            if self.lives ==0:  #change this into another screen
-                msg = pygame.font.Font(None, 70).render("Game Over", True, (0,255,255), bgcolor)
-                msgrect = msg.get_rect()
-                msgrect = msgrect.move(self.width/2 - (msgrect.center[0]), self.height/3)
-                screen.blit(msg, msgrect)
-                pygame.display.flip()
+        if self.game_over:
+            msg = self.font.render("Game Over!", 1, pygame.Color("white"))
+            self.screen.blit(msg,(Constant.screen_width/2 - 75,Constant.screen_height/2))
+        else:
+            self.all_sprites.draw(self.screen)
 
-                #process key press, ESC to quit, any other to restart game
-                while 1:
-                    restart = False
-                    for event in pygame.event.get():
-                        if event.type == pygame.QUIT:
-                            sys.exit()
-                        if event.type == pygame.KEYDOWN:
-                            if event.key == pygame.K_ESCAPE:
-                                sys.exit()
-                            if not (event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT):                                    
-                                restart = True  
-                    if restart:
-                        screen.fill(bgcolor)
-                        self.wall.build_wall(self.width)
-                        self.lives = self.full_lives
-                        self.score = 0
-                        break
-    
-    def hit_wall(self):
-        idx = self.ballrect.collidelist(self.wall.brickrect)
-        if idx != -1:
-            if self.ballrect.center[0] > self.wall.brickrect[idx].right or\
-                self.ballrect.center[0] < self.wall.brickrect[idx].left:
-                self.xspeed = - self.xspeed
-            else:
-                self.yspeed = - self.yspeed
-            self.bounce.play(0)
-            self.wall.brickrect[idx:idx+1] = []
-            self.score +=10
-
-    def rebuild_wall(self):
-        if self.wall.brickrect == []:
-            self.wall.build_wall(self.width)
-            self.xspeed = self.xspeed0
-            self.yspeed = self.yspeed0
-            self.ballrect.center = self.width/2, self.height/3
-
-
-
-        
-    
-
-
-
-            
-
-
-
-
-
-
-if __name__ == '__main__':
-    br = Breakout()
-    br.main()
-
-
+            msg = self.font.render("Lives: {0}".format(self.paddle.lives),1,pygame.Color("white"))
+            self.screen.blit(msg,(15,15))

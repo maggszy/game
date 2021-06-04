@@ -1,28 +1,37 @@
 import pygame
+from sett import Constant
 
-#mabye make another wall
+bricks = [
+    "img/bluerect.png",
+    "img/redrect.png",
+    "img/purplerect.png",
+    "img/greenrect.png",
+    "img/yellowrect.png"
+]
 
-class Wall():
-    def __init__(self):
-        self.brick = pygame.image.load("images/brick.png").convert()
-        brickrect = self.brick.get_rect()
-        self.bricklength = brickrect.right - brickrect.left       
-        self.brickheight = brickrect.bottom - brickrect.top             
+class Wall:
+    def __init__(self, all_sprites):
+        self.all_sprites = all_sprites
+        self.all_bricks = pygame.sprite.Group()
 
-    def build_wall(self, width):        
-        xpos = 0
-        ypos = 60
-        adj = 0
-        self.brickrect = []
-        for i in range (0, 52):           
-            if xpos > width:
-                if adj == 0:
-                    adj = self.bricklength / 2
-                else:
-                    adj = 0
-                xpos = -adj
-                ypos += self.brickheight
-                
-            self.brickrect.append(self.brick.get_rect())    
-            self.brickrect[i] = self.brickrect[i].move(xpos, ypos)
-            xpos = xpos + self.bricklength
+        for row in range(Constant.brick_rows):
+            for col in range(Constant.brick_cols):
+                brick = Brick(row, col)
+                self.all_sprites.add(brick)
+                self.all_bricks.add(brick)
+
+    def check_collison(self,ball):
+        collision_list = pygame.sprite.spritecollide(ball, self.all_bricks, False)
+        for brick in collision_list:
+            ball.bounce()
+            brick.kill()
+
+class Brick(pygame.sprite.Sprite):
+    def __init__(self,row,col):
+        super().__init__()
+        self.x_pos = Constant.brick_start + (col *64) + 16
+        self.y_pos = Constant.brick_start + (row * 32) + 16
+        self.image = pygame.image.load(bricks[row])
+        self.rect = self.image.get_rect()
+        self.rect.center = (self.x_pos, self.y_pos)
+

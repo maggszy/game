@@ -11,7 +11,7 @@ class Ball(pygame.sprite.Sprite):
         self.y_pos = Constant.screen_height / 2
         self.image = pygame.image.load("img/ballBlue.png").convert_alpha()
         self.rect = self.image.get_rect()
-        self.speed = [randint(2,4), randint(-4,4)]
+        self.speed = [randint(2,4), randint(2,4)]
         self.rect.center = (self.x_pos, self.y_pos)
 
         self.sound = pygame.mixer.Sound('sound/bounce_sound.wav')
@@ -33,7 +33,7 @@ class Ball(pygame.sprite.Sprite):
         self.rect.center = (self.x_pos, self.y_pos)
 
     def reset(self):
-        self.speed = [randint(2,4), randint(-4,4)]
+        self.speed = [randint(2,4), randint(2,4)]
         self.x_pos = Constant.screen_width / 2
         self.y_pos = Constant.screen_height / 2
         self.rect.center = (self.x_pos, self.y_pos)
@@ -59,4 +59,4 @@ class Ball(pygame.sprite.Sprite):
     def bounce(self):
         self.sound.play(0)
         self.speed[0] = -self.speed[0]
-        self.speed[1] = randint(-4,4)
+        self.speed[1] = randint(2,4)

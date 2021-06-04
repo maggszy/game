@@ -5,8 +5,9 @@ from paddle import Paddle
 from ball import Ball
 from wall import Wall
 #do sth with the speed
-# and repeat the screen after breaking whole wall 
-# to show game over with the background
+# and repeat the screen after breaking whole wall  :DDDD DONEEEE
+#return some messages with the "GAME OVER!" 
+# (like:score, buttons to go to the menu,clues how to restart or guit)
 
 class Breakout:
     def __init__(self):
@@ -65,6 +66,9 @@ class Breakout:
             self.ball.reset()
         self.ball.collision_paddle(self.paddle)
         self.wall.check_collison(self.ball)
+        if not self.wall.all_bricks:
+            self.wall.update()
+            self.ball.reset()
         self.all_sprites.update()
         pygame.display.update()
         self.clock.tick(120)
@@ -77,6 +81,7 @@ class Breakout:
             gameover = self.font.render("Game Over!", 1, pygame.Color("white"))
             self.screen.blit(gameover,(Constant.screen_width/2 - 75,Constant.screen_height/2))
             #write what to do next
+            # display your final score
         else:
             self.all_sprites.draw(self.screen)
 
@@ -84,6 +89,4 @@ class Breakout:
             self.screen.blit(msg,(15,15))
 
             score = self.font.render("Score:{0}".format(self.wall.score), 1,pygame.Color("white"))
-            self.screen.blit(score,(Constant.screen_width - 100 ,15))
-            #scoretext = pygame.font.Font(None,40).render(str(score), True, (0,255,255), bgcolour)
-            #scoretextrect = scoretext.get_rect()
+            self.screen.blit(score,(Constant.screen_width - 150 ,15))

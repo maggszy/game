@@ -1,7 +1,7 @@
 class Constant:
     screen_height = 600
     screen_width = 800
-    start_lives = 3
+    start_lives = 5
     paddle_speed = 6
     collision_treshold = 12
     ball_maxspeed = 7

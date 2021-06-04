@@ -10,9 +10,12 @@ bricks = [
 ]
 
 class Wall:
+
     def __init__(self, all_sprites):
         self.all_sprites = all_sprites
         self.all_bricks = pygame.sprite.Group()
+
+        self.score = 0  #punkty
 
         for row in range(Constant.brick_rows):
             for col in range(Constant.brick_cols):
@@ -25,6 +28,7 @@ class Wall:
         for brick in collision_list:
             ball.bounce()
             brick.kill()
+            self.score += 10
 
 class Brick(pygame.sprite.Sprite):
     def __init__(self,row,col):

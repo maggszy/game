@@ -2,7 +2,7 @@ import pygame
 from sett import Constant
 
 bricks = [
-    "img/bluerect.png",
+    "img/greenrect.png",
     "img/redrect.png",
     "img/purplerect.png",
     "img/greyrect.png",

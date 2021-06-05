@@ -4,6 +4,8 @@ from sett import Constant
 from paddle import Paddle
 from ball import Ball
 from wall import Wall
+from menu import MainMenu
+from othermenu import *
 #do sth with the speed
 # and repeat the screen after breaking whole wall  :DDDD DONEEEE
 #return some messages with the "GAME OVER!" 
@@ -13,12 +15,26 @@ class Breakout:
     def __init__(self):
         pygame.init()
         pygame.display.set_caption("Breakout!")
+        self.running, self.playing = True, False
+        self.width, self.height = 800, 600
+        self.display = pygame.Surface((self.width,self.height))
         self.screen = pygame.display.set_mode((Constant.screen_width,Constant.screen_height))
-        
+        self.UP_KEY= Constant.UP_KEY #false
+        self.DOWN_KEY=Constant.DOWN_KEY  #false
+        self.START_KEY= Constant.START_KEY #false
+        self.BACK_KEY = Constant.BACK_KEY #false
         self.clock = pygame.time.Clock()
 
+        self.main_menu = MainMenu(self)
+        self.rules = RulesMenu(self)
+        self.credits = CreditsMenu(self)
+        self.scores = ScoresMenu(self)
+        self.current_menu = self.main_menu
+
+        self.bg_img4 =  pygame.image.load("img/galaxx3.png").convert_alpha()
         self.bg_color = pygame.Color("black")
         self.font = pygame.font.Font("kenney_future.ttf", 16)
+        self.font_name = "kenney_future.ttf"
         self.game_over = False
 
 
@@ -33,6 +49,7 @@ class Breakout:
         self.failing_sound = pygame.mixer.Sound('sound/game_over.wav')
         self.failing_sound.set_volume(10)
 
+    #need chagne to work with menu 
     def reset(self):
         self.game_over = False
         self.paddle = Paddle()
@@ -42,6 +59,23 @@ class Breakout:
         self.all_sprites.add(self.paddle,self.ball)
         self.wall = Wall(self.all_sprites)
 
+    def breakout_loop(self):
+        while True:#self.playing:
+            self.handle_events()
+            self.update()
+            self.draw()
+
+    def game_loop(self):
+        while self.playing:
+            self.handle_events()
+            if self.START_KEY:
+                self.playing = False
+            self.display.fill(self.bg_color)
+            self.breakout_loop()
+            self.screen.blit(self.display, (0,0))
+            pygame.display.update()
+            self.reset_keys()
+    
     #maybe to change xd 
     def handle_events(self):
         keys = pygame.key.get_pressed()
@@ -58,6 +92,21 @@ class Breakout:
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+                self.running, self.playing = False, False
+                self.current_menu.display_run = False
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RETURN:
+                    self.START_KEY = True
+                if event.key == pygame.K_BACKSPACE:
+                    self.BACK_KEY = True
+                if event.key == pygame.K_DOWN:
+                    self.DOWN_KEY = True
+                if event.key == pygame.K_UP:
+                    self.UP_KEY = True
+
+    def reset_keys(self):
+        self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY = False, False, False, False
+
 
     def update(self):
         if self.ball.off_screen():
@@ -74,8 +123,16 @@ class Breakout:
         pygame.display.update()
         self.clock.tick(120)
 
+    def draw_text(self, text, size, x, y ):
+        font = pygame.font.Font(self.font_name,size)
+        text_surface = font.render(text, True, pygame.Color("white"))
+        text_rect = text_surface.get_rect()
+        text_rect.center = (x,y)
+        self.display.blit(text_surface,text_rect)
+
     def draw(self):
-        self.screen.fill(self.bg_color)
+        #self.screen.fill(self.bg_color)
+        self.screen.blit(self.bg_img4, (0,0))
 
         if self.game_over:
             self.failing_sound.play(0)

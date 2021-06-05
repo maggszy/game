@@ -9,9 +9,9 @@ class Ball(pygame.sprite.Sprite):
         super().__init__()
         self.x_pos = Constant.screen_width / 2
         self.y_pos = Constant.screen_height / 2
-        self.image = pygame.image.load("img/ballBlue.png").convert_alpha()
+        self.image = pygame.image.load("img/ballGrey.png").convert_alpha()
         self.rect = self.image.get_rect()
-        self.speed = [randint(2,4), randint(2,4)]
+        self.speed = [randint(-4,4), randint(2,4)]
         self.rect.center = (self.x_pos, self.y_pos)
 
         self.sound = pygame.mixer.Sound('sound/bounce_sound.wav')
@@ -23,7 +23,7 @@ class Ball(pygame.sprite.Sprite):
             self.speed[0] =- self.speed[0]
         if self.y_pos < 11:
             self.speed[1] =- self.speed[1]
-        if self.speed[0]== 0:
+        if self.speed[0]== 0 or self.speed[0]== 1:
             self.speed[0] += 4
         if self.speed[1] == 0:
             self.speed[1] +=4

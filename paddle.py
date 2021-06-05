@@ -9,7 +9,7 @@ class Paddle(pygame.sprite.Sprite):
         self.y_pos = Constant.screen_height - 50 #paddle will be 50px up the bottom of screen
         self.x_pos = Constant.screen_width / 2
         self.rect.center = (self.x_pos, self.y_pos)
-        self.direcition = 0 #direction of the paddle
+        self.way = 0 #way of the paddle
         self.lives = Constant.start_lives
     
     def update(self):
@@ -27,9 +27,9 @@ class Paddle(pygame.sprite.Sprite):
 
     def move_left(self):
         self.x_pos -=Constant.paddle_speed
-        self.direction = -1 #controlling speed
+        self.way = -1 #controlling speed
 
     def move_right(self):
         self.x_pos += Constant.paddle_speed
-        self.direction = 1 
+        self.way = 1 
            

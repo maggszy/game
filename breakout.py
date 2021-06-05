@@ -42,6 +42,7 @@ class Breakout:
         self.all_sprites.add(self.paddle,self.ball)
         self.wall = Wall(self.all_sprites)
 
+    #maybe to change xd 
     def handle_events(self):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT]:

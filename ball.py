@@ -17,7 +17,7 @@ class Ball(pygame.sprite.Sprite):
         self.sound = pygame.mixer.Sound('sound/bounce_sound.wav')
         self.sound.set_volume(10)
 
-
+     #to do some changes 
     def update(self):
         if self.x_pos < 11 or self.x_pos > Constant.screen_width -11:
             self.speed[0] =- self.speed[0]
@@ -42,7 +42,7 @@ class Ball(pygame.sprite.Sprite):
         if self.rect.colliderect(paddle.rect):
             if abs(self.rect.bottom - paddle.rect.top) < Constant.collision_treshold and self.speed[1] >0:
                 self.speed[1] = -self.speed[1]
-                self.speed[0] += paddle.direction
+                self.speed[0] += paddle.way
                 self.sound.play(0)
                 if self.speed[0] > Constant.ball_maxspeed:
                     self.speed[0] = Constant.ball_maxspeed

@@ -10,7 +10,7 @@ class Menu:
         self.offset = -100
 
     def draw_cursor(self):
-        self.game.draw_text("*",20,self.cursor_rect.x - 10,self.cursor_rect.y)
+        self.game.draw_text("*",20,self.cursor_rect.x - 10,self.cursor_rect.y, pygame.Color("red"))
 
     def blit_screen(self):
         self.game.screen.blit(self.game.display, (0,0))
@@ -25,6 +25,7 @@ class MainMenu(Menu):
         self.rulesx, self.rulesy = self.half_w, self.half_h +30
         self.scoresx, self.scoresy = self.half_w, self.half_h +60
         self.creditsx, self.creditsy = self.half_w, self.half_h + 90
+        self.quitx, self.quity = self.half_w, self.half_h + 120
         self.msgx, self.msgy = self.half_w, self.half_h + 250
         self.cursor_rect.midtop = (self.startx + self.offset, self.starty)
 
@@ -40,7 +41,8 @@ class MainMenu(Menu):
             self.game.draw_text("Rules", 25, self.rulesx, self.rulesy)
             self.game.draw_text("High Scores", 25, self.scoresx, self.scoresy)
             self.game.draw_text("Credits", 25, self.creditsx, self.creditsy)
-            self.game.draw_text("Press <Esc> to quit the game", 10, self.msgx, self.msgy)
+            self.game.draw_text("Quit", 25, self.quitx, self.quity)
+            self.game.draw_text("Press <up_arrow> to move cursor up and <down_arrow> to move it down", 10, self.msgx, self.msgy)
             self.draw_cursor()
             self.blit_screen()
 
@@ -56,12 +58,15 @@ class MainMenu(Menu):
                 self.cursor_rect.midtop = (self.creditsx + self.offset, self.creditsy)
                 self.state = "Credits"
             elif self.state == "Credits":
+                self.cursor_rect.midtop = (self.quitx + self.offset, self.quity)
+                self.state = "Quitt"
+            elif self.state == "Quitt":
                 self.cursor_rect.midtop = (self.startx + self.offset, self.starty)
                 self.state = "Start"
         if self.game.UP_KEY:
             if self.state == "Start":
-                self.cursor_rect.midtop = (self.creditsx + self.offset, self.creditsy)
-                self.state = "Credits"
+                self.cursor_rect.midtop = (self.quitx + self.offset, self.quity)
+                self.state = "Quitt"
             elif self.state == "Rules":
                 self.cursor_rect.midtop = (self.startx + self.offset, self.starty)
                 self.state = "Start"
@@ -71,6 +76,9 @@ class MainMenu(Menu):
             elif self.state == "Credits":
                 self.cursor_rect.midtop = (self.scoresx + self.offset, self.scoresy)
                 self.state = "Scores"
+            elif self.state == "Quitt":
+                self.cursor_rect.midtop = (self.creditsx + self.offset, self.creditsy)
+                self.state = "Credits"
         
     def check_button(self):
         self.move_cursor()
@@ -83,5 +91,7 @@ class MainMenu(Menu):
                 self.game.current_menu = self.game.scores
             elif self.state == "Credits":
                 self.game.current_menu = self.game.credits
+            elif self.state == "Quitt":
+                self.game.current_menu = self.game.quiit
             self.display_run = False
  

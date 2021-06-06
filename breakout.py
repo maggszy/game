@@ -51,6 +51,9 @@ class Breakout:
         self.failing_sound = pygame.mixer.Sound('sound/game_over.wav')
         self.failing_sound.set_volume(10)
 
+        icon = pygame.image.load("img/icon.png")
+        pygame.display.set_icon(icon)
+
 
     #do not need change 
     def reset(self):

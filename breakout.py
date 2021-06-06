@@ -29,6 +29,8 @@ class Breakout:
         self.rules = RulesMenu(self)
         self.credits = CreditsMenu(self)
         self.scores = ScoresMenu(self)
+        self.quiit = Quiit(self)
+        self.fail_menu = GameOverMenu(self)
         self.current_menu = self.main_menu
 
         self.bg_img4 =  pygame.image.load("img/galaxx3.png").convert_alpha()
@@ -49,7 +51,8 @@ class Breakout:
         self.failing_sound = pygame.mixer.Sound('sound/game_over.wav')
         self.failing_sound.set_volume(10)
 
-    #need chagne to work with menu 
+
+    #do not need change 
     def reset(self):
         self.game_over = False
         self.paddle = Paddle()
@@ -60,9 +63,13 @@ class Breakout:
         self.wall = Wall(self.all_sprites)
 
     def breakout_loop(self):
-        while True:#self.playing:
+        while self.playing:
             self.handle_events()
             self.update()
+            if self.game_over:
+                self.current_menu = self.fail_menu
+                self.playing = False
+                self.reset()
             self.draw()
 
     def game_loop(self):
@@ -75,23 +82,22 @@ class Breakout:
             self.screen.blit(self.display, (0,0))
             pygame.display.update()
             self.reset_keys()
-    
-    #maybe to change xd 
+
     def handle_events(self):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT]:
             self.paddle.move_left()
         if keys[pygame.K_RIGHT]:
             self.paddle.move_right()
-        if self.game_over and keys[pygame.K_SPACE]:
-            self.reset()
+        #if self.game_over and keys[pygame.K_SPACE]:
+         #   self.reset()
         if keys[pygame.K_ESCAPE]:
             sys.exit()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
+                #pygame.quit()
+                #sys.exit()
                 self.running, self.playing = False, False
                 self.current_menu.display_run = False
             if event.type == pygame.KEYDOWN:
@@ -123,28 +129,30 @@ class Breakout:
         pygame.display.update()
         self.clock.tick(120)
 
-    def draw_text(self, text, size, x, y ):
+    def draw_text(self, text, size, x, y ,color=pygame.Color("white")):
         font = pygame.font.Font(self.font_name,size)
-        text_surface = font.render(text, True, pygame.Color("white"))
+        text_surface = font.render(text, True, color)
         text_rect = text_surface.get_rect()
         text_rect.center = (x,y)
         self.display.blit(text_surface,text_rect)
+    
+
 
     def draw(self):
-        #self.screen.fill(self.bg_color)
         self.screen.blit(self.bg_img4, (0,0))
 
-        if self.game_over:
-            self.failing_sound.play(0)
-            gameover = self.font.render("Game Over!", 1, pygame.Color("white"))
-            self.screen.blit(gameover,(Constant.screen_width/2 - 75,Constant.screen_height/2))
-            #write what to do next
+        #if self.game_over:
+         #   self.failing_sound.play(0)
+          #  #self.current_menu = self.main_menu
+           # gameover = self.font.render("Game Over!", 1, pygame.Color("white"))
+            #self.screen.blit(gameover,(Constant.screen_width/2 - 75,Constant.screen_height/2))
+            #self.screen.blit(score,(Constant.screen_width/2 ,500))
+            
             # display your final score
-        else:
-            self.all_sprites.draw(self.screen)
+        #else:
+        self.all_sprites.draw(self.screen)
 
-            msg = self.font.render("Lives: {0}".format(self.paddle.lives),1,pygame.Color("white"))
-            self.screen.blit(msg,(15,15))
-
-            score = self.font.render("Score:{0}".format(self.wall.score), 1,pygame.Color("white"))
-            self.screen.blit(score,(Constant.screen_width - 150 ,15))
+        msg = self.font.render("Lives: {0}".format(self.paddle.lives),1,pygame.Color("white"))
+        self.screen.blit(msg,(15,15))
+        score = self.font.render("Score:{0}".format(self.wall.score), 1,pygame.Color("white"))
+        self.screen.blit(score,(Constant.screen_width - 150 ,15))

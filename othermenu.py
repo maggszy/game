@@ -58,6 +58,7 @@ class CreditsMenu(Menu):
             self.game.draw_text("Press <Backspace> to back to the main menu", 10, self.half_w, self.half_h +250)
             self.game.draw_text("Production date: 2021", 10, 90, Constant.screen_height- 20)
             self.blit_screen()
+
 #needs finisking
 class ScoresMenu(Menu):
     def __init__(self,game):
@@ -71,16 +72,47 @@ class ScoresMenu(Menu):
                 self.game.current_menu = self.game.main_menu
                 self.display_run = False
             self.game.display.blit(self.game.bg_img4, (0,0))
+            self.game.draw_text("High scores", 40, self.half_w, self.half_h -150)
+            self.display_scores()
+            #self.game.draw_text("1.", 30, self.half_w-150, self.half_h -50)
+            #self.game.draw_text("2.", 30, self.half_w-150, self.half_h -10)
+            #self.game.draw_text("3.", 30, self.half_w-150, self.half_h +30)
+            #self.game.draw_text("4.", 30, self.half_w-150, self.half_h +70)
+            #self.game.draw_text("5.", 30, self.half_w-150, self.half_h +110)
+            self.game.draw_text("Press <Backspace> to back to the main menu", 10, self.half_w, self.half_h +250)
             self.blit_screen()
 
-#maybe not necessary   
+
+    def display_scores(self):
+        pos_y= -50
+        with open(Constant.list_scores,"r") as f:
+            scores = f.read()
+            scores = scores.split(',')
+
+        for i in range(1,6):
+            #self.game.draw_text(f"{i}."+ "  "+ "."*20 +" "+ scores[i-1] , 30, self.half_w,self.half_h + pos_y)
+            self.game.draw_text(f"{i}."+ "  "+ self.check_len(i, scores[i-1]) , 30, self.half_w,self.half_h + pos_y)
+            pos_y +=40
+
+    def check_len(self,i,final):
+        if len(final)==1:
+            return "."*20 +" "+ final
+        elif len(final)==2:
+            return "."*19 +" "+ final
+        elif len(final)==3:
+            return "."*18 +" "+ final
+        elif len(final)==4:
+            return "."*17 +" "+ final
+
+
+ 
 class GameOverMenu(Menu):
     def __init__(self,game):
         Menu.__init__(self,game)
         #self.game.game_over = True
         self.state = "Restart"
         self.game_overx, self.game_overy = self.half_w, self.half_h -100
-        self.scorex, self.scorey = self.half_w, self.half_h -50
+        self.scorex, self.scorey = self.half_w, self.half_h -25 
         self.restartx, self.restarty = self.half_w, self.half_h + 50
         self.main_menux, self.main_menuy = self.half_w, self.half_h + 100
         self.high_scorex, self.high_scorey = self.half_w, self.half_h + 150
@@ -103,7 +135,7 @@ class GameOverMenu(Menu):
             self.game.draw_text("Game over!!!", 40, self.game_overx, self.game_overy)
             #self.game.draw_text("Score: {0}".format(self.game.wall.score), 25,self.scorex, self.scorey, pygame.Color("red"))
             #self.game.draw_text("Score:" + self.game.final_score, 25,self.scorex, self.scorey, pygame.Color("red"))
-            self.game.draw_text("Score:" + score, 25,self.scorex, self.scorey, pygame.Color("red"))
+            self.game.draw_text("Score:" + score, 35,self.scorex, self.scorey, pygame.Color("red"))
             self.game.draw_text("Restart", 25, self.restartx, self.restarty)
             self.game.draw_text("Main Menu", 25, self.main_menux, self.main_menuy)
             self.game.draw_text("High Scores", 25,self.high_scorex, self.high_scorey)

@@ -124,6 +124,7 @@ class Breakout:
             if self.paddle.lives <= 0:
                 self.saving_score()
                 self.game_over = True
+                self.failing_sound.play(0)
             self.ball.reset()
         self.ball.collision_paddle(self.paddle)
         self.wall.check_collison(self.ball)
@@ -142,11 +143,28 @@ class Breakout:
         self.display.blit(text_surface,text_rect)
     
     def saving_score(self):
-        with open("this_score.txt", "r+") as f:
+        with open(Constant.this_score, "r+") as f:
             #this_score = f.read()
             f.truncate(0)
             this_score = self.final_score
             f.write(this_score)
+
+#pewnie jakoś lepiej, szybciej można to zrobić
+    def list_of_scores(self, final):
+        # checking len, < >, 
+        with open(Constant.list_scores, "r+") as li:
+            points = li.read()
+            points = points.split(",")
+
+        if len(points) == 5:
+            if points[0] < final:
+                for i in range(1,len(points)):
+                    points[i] = points[i-1]
+                point[0] = final
+            elif point:
+                pass
+            #needs finishing
+
 
     def draw(self):
         self.screen.blit(self.bg_img4, (0,0))

@@ -23,6 +23,7 @@ class Breakout:
         self.DOWN_KEY=Constant.DOWN_KEY  #false
         self.START_KEY= Constant.START_KEY #false
         self.BACK_KEY = Constant.BACK_KEY #false
+        self.final_score = 0
         self.clock = pygame.time.Clock()
 
         self.main_menu = MainMenu(self)
@@ -121,6 +122,7 @@ class Breakout:
         if self.ball.off_screen():
             self.paddle.lose_life()
             if self.paddle.lives <= 0:
+                self.saving_score()
                 self.game_over = True
             self.ball.reset()
         self.ball.collision_paddle(self.paddle)
@@ -139,7 +141,11 @@ class Breakout:
         text_rect.center = (x,y)
         self.display.blit(text_surface,text_rect)
     
-
+    def saving_score(self):
+        with open("this_score.txt", "r+") as f:
+            this_score = f.read()
+            this_score = self.final_score
+            f.write(this_score)
 
     def draw(self):
         self.screen.blit(self.bg_img4, (0,0))
@@ -154,8 +160,9 @@ class Breakout:
             # display your final score
         #else:
         self.all_sprites.draw(self.screen)
-
+        self.final_score = "{0}".format(self.wall.score)
         msg = self.font.render("Lives: {0}".format(self.paddle.lives),1,pygame.Color("white"))
         self.screen.blit(msg,(15,15))
-        score = self.font.render("Score:{0}".format(self.wall.score), 1,pygame.Color("white"))
+        #score = self.font.render("Score:{0}".format(self.wall.score), 1,pygame.Color("white"))
+        score = self.font.render("Score:" + self.final_score, 1,pygame.Color("white"))
         self.screen.blit(score,(Constant.screen_width - 150 ,15))

@@ -9,3 +9,4 @@ class Constant:
     brick_start = 36 #from the top
     brick_cols = 12
     brick_rows = 5
+    this_score = "this_score.txt"

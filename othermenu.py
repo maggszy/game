@@ -85,9 +85,15 @@ class GameOverMenu(Menu):
         self.main_menux, self.main_menuy = self.half_w, self.half_h + 100
         self.high_scorex, self.high_scorey = self.half_w, self.half_h + 150
         self.quitx, self.quity = self.half_w, self.half_h + 200
+        self.msgx, self.msgy = self.half_w, self.half_h + 270
         self.cursor_rect.midtop = (self.restartx + self.offset, self.restarty)
 
+    def open(self):
+        with open(Constant.this_score, "r") as f:
+             return f.read()
+
     def show_menu(self):
+        score = self.open()
         self.display_run = True
         while self.display_run:
             self.game.handle_events()
@@ -95,12 +101,14 @@ class GameOverMenu(Menu):
             #self.game.display.fill(self.game.bg_color)
             self.game.display.blit(self.game.bg_img4, (0,0))
             self.game.draw_text("Game over!!!", 40, self.game_overx, self.game_overy)
-            self.game.draw_text("Score: {0}".format(self.game.wall.score), 25,self.scorex, self.scorey, pygame.Color("red"))
+            #self.game.draw_text("Score: {0}".format(self.game.wall.score), 25,self.scorex, self.scorey, pygame.Color("red"))
+            #self.game.draw_text("Score:" + self.game.final_score, 25,self.scorex, self.scorey, pygame.Color("red"))
+            self.game.draw_text("Score:" + score, 25,self.scorex, self.scorey, pygame.Color("red"))
             self.game.draw_text("Restart", 25, self.restartx, self.restarty)
             self.game.draw_text("Main Menu", 25, self.main_menux, self.main_menuy)
             self.game.draw_text("High Scores", 25,self.high_scorex, self.high_scorey)
             self.game.draw_text("Quit", 25,self.quitx, self.quity)
-            #self.game.draw_text("Press <Space> to restart game", 10, self.half_w, self.half_h +250)
+            self.game.draw_text("Press <up_arrow> to move cursor up and <down_arrow> to move it down", 10, self.msgx, self.msgy)
             self.draw_cursor()
             self.blit_screen()
 

@@ -10,3 +10,4 @@ class Constant:
     brick_cols = 12
     brick_rows = 5
     this_score = "this_score.txt"
+    list_scores = "score_list.txt"

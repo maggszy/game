@@ -143,7 +143,8 @@ class Breakout:
     
     def saving_score(self):
         with open("this_score.txt", "r+") as f:
-            this_score = f.read()
+            #this_score = f.read()
+            f.truncate(0)
             this_score = self.final_score
             f.write(this_score)
 

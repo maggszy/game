@@ -4,9 +4,11 @@
 ### Short description
 This project was created within the programming course at the Wrocław University of Science and Technology.
 This game is a clone of well-known arcade game named Arkanoid, also called as Breakout. The main aim of this game is breaking all of the bricks and getting the highest score. 
-![](images/presentation.png)
-![](images/presentation2.png)
-![](images/presentation3.png)
+![](img/presentation.png)
+
+![](img/presentation2.png)
+
+![](img/presentation3.png)
 
 ### Technologies
 **Python** - programming language, verison 3.7.9 recommended. 

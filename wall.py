@@ -10,8 +10,13 @@ bricks = [
 ]
 
 class Wall:
-
+    """
+    Class that build Wall of bricks 
+    """
     def __init__(self, all_sprites):
+        """
+        Initilize needed variable
+        """
         self.all_sprites = all_sprites
         self.all_bricks = pygame.sprite.Group()
         self.score = 0  
@@ -23,6 +28,9 @@ class Wall:
                 self.all_bricks.add(brick)
 
     def check_collison(self,ball):
+        """
+        Check collision between bricks and ball
+        """
         self.collision_list = pygame.sprite.spritecollide(ball, self.all_bricks, False)
         for brick in self.collision_list:
             ball.bounce()
@@ -30,13 +38,19 @@ class Wall:
             self.score += 10
 
     def update(self):
-            for row in range(Constant.brick_rows):
-                for col in range(Constant.brick_cols):
-                    brick = Brick(row, col)
-                    self.all_sprites.add(brick) 
-                    self.all_bricks.add(brick)   
+        """
+        Update the wall
+        """
+        for row in range(Constant.brick_rows):
+            for col in range(Constant.brick_cols):
+                brick = Brick(row, col)
+                self.all_sprites.add(brick) 
+                self.all_bricks.add(brick)   
 
 class Brick(pygame.sprite.Sprite):
+    """
+    Class that build the wall
+    """
     def __init__(self,row,col):
         super().__init__()
         self.x_pos = Constant.brick_start + (col *64) + 14

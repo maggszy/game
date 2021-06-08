@@ -5,10 +5,16 @@ import sys
 import json
 
 class RulesMenu(Menu):
+    """
+    Display the view and action after pressing 'Rules' button on the main menu
+    """
     def __init__(self,game):
         Menu.__init__(self,game)
 
     def show_menu(self):
+        """
+        Display the view of 'Rules' menu 
+        """
         self.display_run = True
         while self.display_run:
             self.game.handle_events()
@@ -27,20 +33,32 @@ class RulesMenu(Menu):
             self.blit_screen()
 
 class Quiit(Menu):
+    """
+    Quit the game
+    """
     def __init__(self,game):
         Menu.__init__(self,game)
     
     def show_menu(self):
+        """
+        Quit the game
+        """
         self.display_run = True
         while self.display_run:
             pygame.quit()
             sys.exit()
         
 class CreditsMenu(Menu):
+    """
+    Display view o the menu after pressing 'Credits' on the main menu
+    """
     def __init__(self,game):
         Menu.__init__(self,game)
 
     def show_menu(self):
+        """
+        Display the buttons and the whole view of 'Credits' menu
+        """
         self.display_run = True
         while self.display_run:
             self.game.handle_events()
@@ -56,10 +74,16 @@ class CreditsMenu(Menu):
             self.blit_screen()
 
 class ScoresMenu(Menu):
+    """
+    Display view of the menu after pressing 'HighScores' on the main menu
+    """
     def __init__(self,game):
         Menu.__init__(self,game)
     
     def show_menu(self):
+        """
+        Display High Scores from the game
+        """
         self.display_run = True
         while self.display_run:
             self.game.handle_events()
@@ -73,6 +97,9 @@ class ScoresMenu(Menu):
             self.blit_screen()
 
     def display_scores(self):
+        """
+        Display scores on the screen
+        """
         pos_y= -50
         with open(Constant.list_scores,"r") as f:
             scores = json.load(f)
@@ -83,6 +110,9 @@ class ScoresMenu(Menu):
             pos_y +=40
 
     def check_len(self,i,final):
+        """
+        Auxilary function in displaying adeqately numbers of dots
+        """
         if len(final)==1:
             return "."*20 +" "+ final
         elif len(final)==2:
@@ -93,7 +123,13 @@ class ScoresMenu(Menu):
             return "."*17 +" "+ final
 
 class GameOverMenu(Menu):
+    """
+    Menu after losing all of the lives
+    """
     def __init__(self,game):
+        """
+        Initializing needed variables
+        """
         Menu.__init__(self,game)
         self.state = "Restart"
         self.game_overx, self.game_overy = self.half_w, self.half_h -100
@@ -106,10 +142,16 @@ class GameOverMenu(Menu):
         self.cursor_rect.midtop = (self.restartx + self.offset, self.restarty)
 
     def open(self):
+        """
+        Open fresh gained score result
+        """
         with open(Constant.this_score, "r") as f:
              return f.read()
 
     def show_menu(self):
+        """
+        Display the view of the widnow
+        """
         score = self.open()
         self.display_run = True
         while self.display_run:
@@ -127,6 +169,9 @@ class GameOverMenu(Menu):
             self.blit_screen()
 
     def move_cursor(self):
+        """
+        Move cursor adequately to the event
+        """
         if self.game.DOWN_KEY:
             self.game.menu_sound.play(0)
             if self.state == "Restart":
@@ -157,6 +202,9 @@ class GameOverMenu(Menu):
                 self.state = "HighScore"
 
     def check_button(self):
+        """
+        Check if buttons are pressed
+        """
         self.move_cursor()
         if self.game.START_KEY:
             if self.state == "Restart":
@@ -169,4 +217,3 @@ class GameOverMenu(Menu):
             elif self.state == "Quit":
                 self.game.current_menu = self.game.quiit
             self.display_run = False
-

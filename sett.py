@@ -1,4 +1,7 @@
 class Constant:
+    """
+    Contain constant of the whole application
+    """
     screen_height = 600
     screen_width = 800
     UP_KEY, DOWN_KEY, START_KEY, BACK_KEY = False, False, False, False

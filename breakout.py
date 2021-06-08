@@ -9,7 +9,13 @@ from othermenu import *
 import json 
 
 class Breakout:
+    """
+    The main class connecting the whole game
+    """
     def __init__(self):
+        """
+        Initialize needed variables
+        """
         pygame.init()
         pygame.display.set_caption("Breakout!")
         self.running, self.playing = True, False
@@ -60,6 +66,9 @@ class Breakout:
         self.right = pygame.transform.scale(self.right,(40,40))
 
     def reset(self):
+        """
+        Reset game
+        """
         self.game_over = False
         self.paddle = Paddle()
         self.ball = Ball()
@@ -69,6 +78,9 @@ class Breakout:
         self.wall = Wall(self.all_sprites)
 
     def breakout_loop(self):
+        """
+        Method that runs the breakout
+        """
         while self.playing:
             self.handle_events()
             self.update()
@@ -79,6 +91,9 @@ class Breakout:
             self.draw()
 
     def game_loop(self):
+        """
+        Run the whole game including menu
+        """
         while self.playing:
             self.handle_events()
             if self.START_KEY:
@@ -90,6 +105,9 @@ class Breakout:
             self.reset_keys()
 
     def handle_events(self):
+        """
+        Check button and react adequately
+        """
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT]:
             self.paddle.move_left()
@@ -113,10 +131,16 @@ class Breakout:
                     self.UP_KEY = True
 
     def reset_keys(self):
+        """
+        Reset keys to the starting state
+        """
         self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY = False, False, False, False
 
 
     def update(self):
+        """
+        Update the game
+        """
         if self.ball.off_screen():
             self.paddle.lose_life()
             if self.paddle.lives <= 0:
@@ -135,6 +159,9 @@ class Breakout:
         self.clock.tick(120)
 
     def draw_text(self, text, size, x, y ,color=pygame.Color("white")):
+        """
+        Display text on the screen
+        """
         font = pygame.font.Font(self.font_name,size)
         text_surface = font.render(text, True, color)
         text_rect = text_surface.get_rect()
@@ -144,12 +171,18 @@ class Breakout:
         
     
     def saving_score(self):
+        """
+        Save gained scores
+        """
         with open(Constant.this_score, "r+") as f:
             f.truncate(0)
             this_score = self.final_score
             f.write(this_score)
 
     def list_of_scores(self):
+        """
+        Check list of high scores with gained score and put the fresh one in the right place
+        """
         with open(Constant.this_score, "r") as f:
             final= f.read()
             final = int(final)
@@ -199,6 +232,9 @@ class Breakout:
                         json.dump(points_file,files)
 
     def draw(self):
+        """
+        Draw all the sprites and Lives and Score on the screen
+        """
         self.screen.blit(self.bg_img4, (0,0))
         self.all_sprites.draw(self.screen)
         self.final_score = "{0}".format(self.wall.score)

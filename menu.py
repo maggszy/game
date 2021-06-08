@@ -2,6 +2,9 @@ import pygame
 from sett import Constant
 
 class Menu:
+    """
+    Create menu class
+    """
     def __init__(self,game):
         self.game = game
         self.half_w, self.half_h = Constant.screen_width/2, Constant.screen_height/2
@@ -10,14 +13,23 @@ class Menu:
         self.offset = -100
 
     def draw_cursor(self):
+        """
+        Draw cursos on the screen
+        """
         self.game.draw_text("*",20,self.cursor_rect.x - 10,self.cursor_rect.y, pygame.Color("red"))
 
     def blit_screen(self):
+        """
+        Blit surface on the screen
+        """
         self.game.screen.blit(self.game.display, (0,0))
         pygame.display.update()
         self.game.reset_keys()
 
 class MainMenu(Menu):
+    """
+    Display the main menu
+    """
     def __init__(self, game):
         Menu.__init__(self,game)
         self.state = "Start"
@@ -30,6 +42,9 @@ class MainMenu(Menu):
         self.cursor_rect.midtop = (self.startx + self.offset, self.starty)
 
     def show_menu(self):
+        """
+        Display text and buttons on the screen of the main menu
+        """
         self.display_run = True
         while self.display_run:
             self.game.handle_events()
@@ -46,6 +61,9 @@ class MainMenu(Menu):
             self.blit_screen()
 
     def move_cursor(self):
+        """
+        Move cursor adequately to the event
+        """
         if self.game.DOWN_KEY:
             self.game.menu_sound.play(0)
             if self.state == "Start":
@@ -82,6 +100,9 @@ class MainMenu(Menu):
                 self.state = "Credits"
         
     def check_button(self):
+        """
+        Check if buttons are pressed
+        """
         self.move_cursor()
         if self.game.START_KEY:
             if self.state == "Start":

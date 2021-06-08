@@ -6,6 +6,7 @@ from ball import Ball
 from wall import Wall
 from menu import MainMenu
 from othermenu import *
+import json 
 #do sth with the speed
 # and repeat the screen after breaking whole wall  :DDDD DONEEEE
 #return some messages with the "GAME OVER!" 
@@ -123,6 +124,7 @@ class Breakout:
             self.paddle.lose_life()
             if self.paddle.lives <= 0:
                 self.saving_score()
+                self.list_of_scores()
                 self.game_over = True
                 self.failing_sound.play(0)
             self.ball.reset()
@@ -149,21 +151,56 @@ class Breakout:
             this_score = self.final_score
             f.write(this_score)
 
-#pewnie jakoś lepiej, szybciej można to zrobić
-    def list_of_scores(self, final):
-        # checking len, < >, 
-        with open(Constant.list_scores, "r+") as li:
-            points = li.read()
-            points = points.split(",")
+#probably there is better way to do this
+    def list_of_scores(self):
+        with open(Constant.this_score, "r") as f:
+            final= f.read()
+            final = int(final)
+        with open(Constant.list_scores, "r") as li:
+            points_file = json.load(li)
+            points = points_file['HighScores']
 
-        if len(points) == 5:
-            if points[0] < final:
-                for i in range(1,len(points)):
-                    points[i] = points[i-1]
-                point[0] = final
-            elif point:
-                pass
-            #needs finishing
+            with open(Constant.list_scores,"w") as files:
+
+                if len(points) == 5:
+                    if points[0] < final:
+                        for i in range(len(points)-1,0,-1):
+                            points[i] = points[i-1]
+                        points[0] = final
+                        json.dump(points_file,files)
+                    elif points[0] > final:
+                        if points[1] < final:
+                            for i in range(len(points)-1,1,-1):
+                                points[i] = points[i-1]
+                            points[1] = final
+                            json.dump(points_file,files)
+                        elif points[1] > final:
+                            if points[2] < final:
+                                for i in range(len(points)-1,2,-1):
+                                    points[i] = points[i-1]
+                                points[2] = final
+                                json.dump(points_file,files)
+                            elif points[2] > final:
+                                if points[3] < final:
+                                    for i in range(len(points)-1,3,-1):
+                                        points[i] = points[i-1]
+                                    points[3] = final
+                                    json.dump(points_file,files)
+                                elif points[3] > final:
+                                    if points[4] < final:
+                                        points[4] = final
+                                        json.dump(points_file,files)
+                                    else:
+                                        json.dump(points_file,files)
+                                else:
+                                    json.dump(points_file,files)
+                            else:
+                                json.dump(points_file,files)
+                        else:
+                            json.dump(points_file,files)
+                    else:
+                        json.dump(points_file,files)
+
 
 
     def draw(self):

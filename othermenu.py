@@ -2,6 +2,7 @@ import pygame
 from menu import Menu
 from sett import Constant
 import sys
+import json
 
 class RulesMenu(Menu):
     def __init__(self,game):
@@ -86,12 +87,11 @@ class ScoresMenu(Menu):
     def display_scores(self):
         pos_y= -50
         with open(Constant.list_scores,"r") as f:
-            scores = f.read()
-            scores = scores.split(',')
+            scores = json.load(f)
+            scores= scores['HighScores']
 
         for i in range(1,6):
-            #self.game.draw_text(f"{i}."+ "  "+ "."*20 +" "+ scores[i-1] , 30, self.half_w,self.half_h + pos_y)
-            self.game.draw_text(f"{i}."+ "  "+ self.check_len(i, scores[i-1]) , 30, self.half_w,self.half_h + pos_y)
+            self.game.draw_text(f"{i}."+ "  "+ self.check_len(i, str(scores[i-1])) , 30, self.half_w,self.half_h + pos_y)
             pos_y +=40
 
     def check_len(self,i,final):

@@ -5,7 +5,7 @@ class Menu:
     def __init__(self,game):
         self.game = game
         self.half_w, self.half_h = Constant.screen_width/2, Constant.screen_height/2
-        self.display_run = True  #to keep menu running
+        self.display_run = True
         self.cursor_rect = pygame.Rect(0,0,20,20)
         self.offset = -100
 
@@ -26,7 +26,7 @@ class MainMenu(Menu):
         self.scoresx, self.scoresy = self.half_w, self.half_h +60
         self.creditsx, self.creditsy = self.half_w, self.half_h + 90
         self.quitx, self.quity = self.half_w, self.half_h + 120
-        self.msgx, self.msgy = self.half_w, self.half_h + 250
+        self.msgx, self.msgy = self.half_w, self.half_h + 270
         self.cursor_rect.midtop = (self.startx + self.offset, self.starty)
 
     def show_menu(self):
@@ -34,7 +34,6 @@ class MainMenu(Menu):
         while self.display_run:
             self.game.handle_events()
             self.check_button()
-            #self.game.display.fill(self.game.bg_color)
             self.game.display.blit(self.game.bg_img4, (0,0))
             self.game.draw_text("Main Menu", 40, self.half_w, self.half_h -100)
             self.game.draw_text("Start Game", 25, self.startx, self.starty)
@@ -48,6 +47,7 @@ class MainMenu(Menu):
 
     def move_cursor(self):
         if self.game.DOWN_KEY:
+            self.game.menu_sound.play(0)
             if self.state == "Start":
                 self.cursor_rect.midtop = (self.rulesx + self.offset, self.rulesy)
                 self.state = "Rules"
@@ -64,6 +64,7 @@ class MainMenu(Menu):
                 self.cursor_rect.midtop = (self.startx + self.offset, self.starty)
                 self.state = "Start"
         if self.game.UP_KEY:
+            self.game.menu_sound.play(0)
             if self.state == "Start":
                 self.cursor_rect.midtop = (self.quitx + self.offset, self.quity)
                 self.state = "Quitt"
@@ -94,4 +95,3 @@ class MainMenu(Menu):
             elif self.state == "Quitt":
                 self.game.current_menu = self.game.quiit
             self.display_run = False
- 

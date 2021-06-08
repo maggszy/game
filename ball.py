@@ -2,8 +2,6 @@ import pygame
 from sett import Constant
 from random import randint
 
-#do sth not to let the ball go straight to the wall
-
 class Ball(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
@@ -17,7 +15,6 @@ class Ball(pygame.sprite.Sprite):
         self.sound = pygame.mixer.Sound('sound/bounce_sound.wav')
         self.sound.set_volume(10)
 
-     #to do some changes 
     def update(self):
         if self.x_pos < 11 or self.x_pos > Constant.screen_width -11:
             self.speed[0] =- self.speed[0]
@@ -51,7 +48,6 @@ class Ball(pygame.sprite.Sprite):
             else:
                 self.speed[0] *= -1 
                 self.sound.play(0)
-
 
     def off_screen(self):
         return self.y_pos > Constant.screen_height

@@ -7,10 +7,6 @@ from wall import Wall
 from menu import MainMenu
 from othermenu import *
 import json 
-#do sth with the speed
-# and repeat the screen after breaking whole wall  :DDDD DONEEEE
-#return some messages with the "GAME OVER!" 
-# (like:score, buttons to go to the menu,clues how to restart or guit)
 
 class Breakout:
     def __init__(self):
@@ -20,10 +16,10 @@ class Breakout:
         self.width, self.height = 800, 600
         self.display = pygame.Surface((self.width,self.height))
         self.screen = pygame.display.set_mode((Constant.screen_width,Constant.screen_height))
-        self.UP_KEY= Constant.UP_KEY #false
-        self.DOWN_KEY=Constant.DOWN_KEY  #false
-        self.START_KEY= Constant.START_KEY #false
-        self.BACK_KEY = Constant.BACK_KEY #false
+        self.UP_KEY= Constant.UP_KEY 
+        self.DOWN_KEY=Constant.DOWN_KEY  
+        self.START_KEY= Constant.START_KEY 
+        self.BACK_KEY = Constant.BACK_KEY 
         self.final_score = 0
         self.clock = pygame.time.Clock()
 
@@ -41,7 +37,6 @@ class Breakout:
         self.font_name = "kenney_future.ttf"
         self.game_over = False
 
-
         self.paddle = Paddle()
         self.ball = Ball()
 
@@ -53,11 +48,17 @@ class Breakout:
         self.failing_sound = pygame.mixer.Sound('sound/game_over.wav')
         self.failing_sound.set_volume(10)
 
+        self.menu_sound = pygame.mixer.Sound('sound/menu2.wav')
+        self.menu_sound.set_volume(10)
+
         icon = pygame.image.load("img/icon.png")
         pygame.display.set_icon(icon)
 
+        self.left = pygame.image.load("img/left.png").convert_alpha()
+        self.left = pygame.transform.scale(self.left,(40,40))
+        self.right = pygame.image.load("img/right.png").convert_alpha()
+        self.right = pygame.transform.scale(self.right,(40,40))
 
-    #do not need change 
     def reset(self):
         self.game_over = False
         self.paddle = Paddle()
@@ -94,15 +95,11 @@ class Breakout:
             self.paddle.move_left()
         if keys[pygame.K_RIGHT]:
             self.paddle.move_right()
-        #if self.game_over and keys[pygame.K_SPACE]:
-         #   self.reset()
         if keys[pygame.K_ESCAPE]:
             sys.exit()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                #pygame.quit()
-                #sys.exit()
                 self.running, self.playing = False, False
                 self.current_menu.display_run = False
             if event.type == pygame.KEYDOWN:
@@ -143,15 +140,15 @@ class Breakout:
         text_rect = text_surface.get_rect()
         text_rect.center = (x,y)
         self.display.blit(text_surface,text_rect)
+
+        
     
     def saving_score(self):
         with open(Constant.this_score, "r+") as f:
-            #this_score = f.read()
             f.truncate(0)
             this_score = self.final_score
             f.write(this_score)
 
-#probably there is better way to do this
     def list_of_scores(self):
         with open(Constant.this_score, "r") as f:
             final= f.read()
@@ -201,24 +198,11 @@ class Breakout:
                     else:
                         json.dump(points_file,files)
 
-
-
     def draw(self):
         self.screen.blit(self.bg_img4, (0,0))
-
-        #if self.game_over:
-         #   self.failing_sound.play(0)
-          #  #self.current_menu = self.main_menu
-           # gameover = self.font.render("Game Over!", 1, pygame.Color("white"))
-            #self.screen.blit(gameover,(Constant.screen_width/2 - 75,Constant.screen_height/2))
-            #self.screen.blit(score,(Constant.screen_width/2 ,500))
-            
-            # display your final score
-        #else:
         self.all_sprites.draw(self.screen)
         self.final_score = "{0}".format(self.wall.score)
         msg = self.font.render("Lives: {0}".format(self.paddle.lives),1,pygame.Color("white"))
         self.screen.blit(msg,(15,15))
-        #score = self.font.render("Score:{0}".format(self.wall.score), 1,pygame.Color("white"))
         score = self.font.render("Score:" + self.final_score, 1,pygame.Color("white"))
         self.screen.blit(score,(Constant.screen_width - 150 ,15))

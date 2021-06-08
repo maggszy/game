@@ -6,8 +6,8 @@ class Constant:
     paddle_speed = 6
     collision_treshold = 12
     ball_maxspeed = 7
-    brick_start = 36 #from the top
+    brick_start = 36 
     brick_cols = 12
     brick_rows = 5
-    this_score = "this_score.txt"
-    list_scores = "leaderboard.json"
+    this_score = "data/this_score.txt"
+    list_scores = "data/leaderboard.json"

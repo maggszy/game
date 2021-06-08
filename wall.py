@@ -44,4 +44,3 @@ class Brick(pygame.sprite.Sprite):
         self.image = pygame.image.load(bricks[row])
         self.rect = self.image.get_rect()
         self.rect.center = (self.x_pos, self.y_pos)
-

@@ -1,1 +1,2 @@
-  #W tym pliku powinny się znaleźć potrzebne biblioteki orz określone ich wersje np.:
+# recommended python verion is 3.7.9
+pygame==2.0.1

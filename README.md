@@ -16,7 +16,7 @@ This game is a clone of well-known arcade game named Arkanoid, also called as Br
 **Pygame** - library for writing arcade games.
 
 ### How to run this app?
-1. Clone the project, replacing my-project with the name of the project you are creating: 
+1. Clone the project, to your directory: 
 `git clone  https://github.com/maggszy/game.git breakout_game`
 `cd breakout_game `
 2. Install the project's development and runtime requirements:

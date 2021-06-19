@@ -57,7 +57,7 @@ class CreditsMenu(Menu):
 
     def show_menu(self):
         """
-        Display the buttons and the whole view of 'Credits' menu
+        Display the buttons and the whole view of 'Credits' menu 
         """
         self.display_run = True
         while self.display_run:
@@ -69,6 +69,9 @@ class CreditsMenu(Menu):
             self.game.draw_text("Credits", 40, self.half_w, self.half_h -100)
             self.game.draw_text("Created by:", 30, self.half_w, self.half_h + 10)
             self.game.draw_text("Magdalena Szymkowiak", 20, self.half_w, self.half_h +60)
+            self.game.draw_text("This game is made as the final project", 20, self.half_w, self.half_h +90)
+            self.game.draw_text("of the Programming course at the Wroclaw ", 20, self.half_w, self.half_h +110)
+            self.game.draw_text("University of Science and Technology.", 20, self.half_w, self.half_h +130)
             self.game.draw_text("Press <Backspace> to back to the main menu", 10, self.half_w, self.half_h + 270)
             self.game.draw_text("Production date: June 2021", 10, 100, 20)
             self.blit_screen()
